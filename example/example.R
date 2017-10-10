@@ -9,8 +9,8 @@ lgb.model <- lgb.train(lgb.params, lgb.dtrain, 3)
 lgb.trees <- lgb.model.dt.tree(lgb.model)
 lgb.trees
 library(lightgbmExplainer)
-explainer = buildExplainer(xgb.model,lgb.train$data, type="binary", base_score = 0.5)
-pred.breakdown = explainPredictions(xgb.model, explainer, lgb.train$data)
+explainer = buildExplainer(lgb.model,lgb.train$data, type="binary", base_score = 0.5)
+pred.breakdown = explainPredictions(lgb.model, explainer, lgb.train$data)
 
 showWaterfall(lgb.model, explainer, lgb.dtrain, lgb.train$data,  2, type = "binary")
 showWaterfall(lgb.model, explainer, lgb.dtrain, lgb.train$data,  8, type = "binary")

@@ -37,6 +37,8 @@
 
 buildExplainer = function(lgb.model, trainingData, type = "binary", base_score = 0.5){
 
+  col_names <- colnames(trainingData)
+
   if(lgb.model$best_iter < 0){
     best_iter <- NULL
   }else{

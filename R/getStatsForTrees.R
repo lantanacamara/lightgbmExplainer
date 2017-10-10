@@ -1,7 +1,7 @@
 
 #' @import data.table
 #' @import lightgbm
-#' @import purrr
+#' @importFrom purrr walk map walk2
 getStatsForTrees = function(trees){
   #Accepts data table of tree (the output of lgb.model.dt.tree)
   #Returns a list of tree, with the stats filled in
