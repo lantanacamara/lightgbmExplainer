@@ -1,6 +1,6 @@
 
 #' @import data.table
-#' @import xgboost
+#' @import lightgbm
 findPath = function(tree, currentnode, path = c()){
 
   #accepts a tree data table, and the node to reach

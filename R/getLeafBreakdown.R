@@ -1,6 +1,6 @@
 
 #' @import data.table
-#' @import xgboost
+#' @import lightgbm
 getLeafBreakdown = function(tree,leaf,col_names){
 
   ####accepts a tree, the leaf id to breakdown and column names

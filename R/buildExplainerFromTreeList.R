@@ -1,6 +1,6 @@
 
 #' @import data.table
-#' @import xgboost
+#' @import lightgbm
 
 buildExplainerFromTreeList = function(tree_list,col_names){
 
