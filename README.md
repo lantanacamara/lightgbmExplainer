@@ -1,7 +1,3 @@
-# Work In Progress
-
-## Caution: Not yet handle missing value as lgb.model.dt.tree
-
 ## lightgbmExplainer
 An R package that makes LightGBM models fully interpretable
 

@@ -3,7 +3,12 @@
 library(lightgbm)
 data(agaricus.train, package = "lightgbm")
 lgb.train <- agaricus.train
-lgb.dtrain <- lgb.Dataset(lgb.train$data, label = lgb.train$label)
+# Test NA
+data_with_na <- lgb.train$data
+data_with_na[2,3] <- NA
+data_with_na[2,56] <- NA
+lgb.dtrain <- lgb.Dataset(data_with_na, label = lgb.train$label)
+# lgb.dtrain <- lgb.Dataset(lgb.train$data, label = lgb.train$label)
 lgb.params = list(objective = "binary")
 lgb.model <- lgb.train(lgb.params, lgb.dtrain, 3)
 lgb.trees <- lgb.model.dt.tree(lgb.model)
@@ -11,9 +16,10 @@ lgb.trees
 library(lightgbmExplainer)
 explainer = buildExplainer(lgb.model,lgb.train$data, type="binary", base_score = 0.5)
 pred.breakdown = explainPredictions(lgb.model, explainer, lgb.train$data)
-predict(lgb.model,lgb.train$data)[2]
-predict(lgb.model,lgb.train$data, rawscore = T)[2]
-showWaterfall(lgb.model, explainer, lgb.dtrain, lgb.train$data,  2, type = "binary")
+predict(lgb.model,data_with_na)[2]
+predict(lgb.model,data_with_na, rawscore = T)[2]
+predict(lgb.model,data_with_na, predleaf = T)[2,]
+showWaterfall(lgb.model, explainer, lgb.dtrain, data_with_na,  2, type = "binary")
 showWaterfall(lgb.model, explainer, lgb.dtrain, lgb.train$data,  8, type = "binary")
 
 
