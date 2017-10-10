@@ -11,7 +11,8 @@ lgb.trees
 library(lightgbmExplainer)
 explainer = buildExplainer(lgb.model,lgb.train$data, type="binary", base_score = 0.5)
 pred.breakdown = explainPredictions(lgb.model, explainer, lgb.train$data)
-
+predict(lgb.model,lgb.train$data)[2]
+predict(lgb.model,lgb.train$data, rawscore = T)[2]
 showWaterfall(lgb.model, explainer, lgb.dtrain, lgb.train$data,  2, type = "binary")
 showWaterfall(lgb.model, explainer, lgb.dtrain, lgb.train$data,  8, type = "binary")
 
