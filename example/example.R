@@ -12,8 +12,8 @@ library(lightgbmExplainer)
 explainer = buildExplainer(xgb.model,lgb.train$data, type="binary", base_score = 0.5)
 pred.breakdown = explainPredictions(xgb.model, explainer, lgb.train$data)
 
-showWaterfall(xgb.model, explainer, lgb.train$data, test.data,  2, type = "binary")
-showWaterfall(xgb.model, explainer, lgb.train$data, test.data,  8, type = "binary")
+showWaterfall(lgb.model, explainer, lgb.dtrain, lgb.train$data,  2, type = "binary")
+showWaterfall(lgb.model, explainer, lgb.dtrain, lgb.train$data,  8, type = "binary")
 
 
 ##### Xgboost ######
