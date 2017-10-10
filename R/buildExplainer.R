@@ -50,7 +50,7 @@ buildExplainer = function(lgb.model, trainingData, type = "binary", base_score =
 
   cat('\nBuilding the Explainer...')
   cat('\nSTEP 1 of 2')
-  tree_list = getStatsForTrees(trees, nodes.train, type = type, base_score = base_score)
+  tree_list = getStatsForTrees(trees)
   cat('\n\nSTEP 2 of 2')
   explainer = buildExplainerFromTreeList(tree_list,col_names)
 
