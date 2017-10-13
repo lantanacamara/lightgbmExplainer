@@ -64,9 +64,10 @@ showWaterfall = function(lgb.model, explainer, lgb.dtrain, lgb.train.data, id, t
   }
 
 
-
-  if (!is.null(lgb.dtrain$getinfo("label")[id])){
-    cat("\nActual: ", lgb.dtrain$getinfo("label")[id])
+  if (!is.null(lgb.dtrain)){
+    if (!is.null(lgb.dtrain$getinfo("label")[id])){
+      cat("\nActual: ", lgb.dtrain$getinfo("label")[id])
+    }
   }
   cat("\nPrediction: ", pred)
   cat("\nWeight: ", weight)
