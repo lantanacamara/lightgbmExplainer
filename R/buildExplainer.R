@@ -1,10 +1,7 @@
 #' Step 1: Build an lightgbmExplainer
 #'
 #' This function outputs an lightgbmExplainer (a data table that stores the feature impact breakdown for each leaf of each tree in an lightgbm model). It is required as input into the explainPredictions and showWaterfall functions.
-#' @param lgb.model A trained lightgbm model
-#' @param trainingData A lgb.Dataset of data used to train the model
-#' @param type The objective function of the model - either "binary" (for binary:logistic) or "regression" (for reg:linear)
-#' @param base_score Default 0.5. The base_score variable of the lightgbm model.
+#' @param lgb_tree A lightgbm.dt.tree
 #' @return The lightgbm Explainer for the model. This is a data table where each row is a leaf of a tree in the lightgbm model
 #'  and each column is the impact of each feature on the prediction at the leaf.
 #'
@@ -28,21 +25,22 @@
 #' lgb.trees <- lgb.model.dt.tree(lgb.model)
 #' lgb.trees
 #' library(lightgbmExplainer)
-#' explainer = buildExplainer(lgb.model,lgb.train.data, type="binary", base_score = 0.5)
+#' explainer = buildExplainer(lgb.trees, colnames(lgb.train.data$data))
 #' pred.breakdown = explainPredictions(lgb.model, explainer, lgb.test.data)
 #'
 #' showWaterfall(lgb.model, explainer, lgb.test.data, test.data,  2, type = "binary")
 #' showWaterfall(lgb.model, explainer, lgb.test.data, test.data,  8, type = "binary")
 
 
-buildExplainer = function(lgb_tree, col_names){
+buildExplainer = function(lgb_tree){
 
+  # TODO - Add test case for lgb.dt.tree order
 
   cat('\nBuilding the Explainer...')
   cat('\nSTEP 1 of 2')
-  tree_list = getStatsForTrees(lgb_tree)
+  lgb_tree_with_stat = getStatsForTrees(lgb_tree)
   cat('\n\nSTEP 2 of 2')
-  explainer = buildExplainerFromTreeList(tree_list,col_names)
+  explainer = buildExplainerFromTree(lgb_tree_with_stat)
 
   cat('\n\nDONE!\n')
 
