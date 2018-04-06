@@ -28,16 +28,14 @@
 #' lgb.trees <- lgb.model.dt.tree(lgb.model)
 #' lgb.trees
 #' library(lightgbmExplainer)
-#' explainer = buildExplainer(xgb.model,xgb.train.data, type="binary", base_score = 0.5)
-#' pred.breakdown = explainPredictions(xgb.model, explainer, xgb.test.data)
+#' explainer = buildExplainer(lgb.model,lgb.train.data, type="binary", base_score = 0.5)
+#' pred.breakdown = explainPredictions(lgb.model, explainer, lgb.test.data)
 #'
-#' showWaterfall(xgb.model, explainer, xgb.test.data, test.data,  2, type = "binary")
-#' showWaterfall(xgb.model, explainer, xgb.test.data, test.data,  8, type = "binary")
+#' showWaterfall(lgb.model, explainer, lgb.test.data, test.data,  2, type = "binary")
+#' showWaterfall(lgb.model, explainer, lgb.test.data, test.data,  8, type = "binary")
 
 
-buildExplainer = function(lgb.model, trainingData, type = "binary", base_score = 0.5){
-
-  col_names <- colnames(trainingData)
+buildExplainer = function(lgb.model, col_names, type = "binary", base_score = 0.5){
 
   if(lgb.model$best_iter < 0){
     best_iter <- NULL
