@@ -35,22 +35,12 @@
 #' showWaterfall(lgb.model, explainer, lgb.test.data, test.data,  8, type = "binary")
 
 
-buildExplainer = function(lgb.model, col_names, type = "binary", base_score = 0.5){
+buildExplainer = function(lgb_tree, col_names){
 
-  if(lgb.model$best_iter < 0){
-    best_iter <- NULL
-  }else{
-    best_iter <- lgb.model$best_iter
-  }
-
-  cat('\nCreating the trees of the lightgbm model...')
-  trees = lgb.model.dt.tree(model = lgb.model, num_iteration = best_iter)
-  cat('\nGetting the leaf nodes for the training set observations...')
-  nodes.train = predict(lgb.model,trainingData,predleaf =TRUE)
 
   cat('\nBuilding the Explainer...')
   cat('\nSTEP 1 of 2')
-  tree_list = getStatsForTrees(trees)
+  tree_list = getStatsForTrees(lgb_tree)
   cat('\n\nSTEP 2 of 2')
   explainer = buildExplainerFromTreeList(tree_list,col_names)
 

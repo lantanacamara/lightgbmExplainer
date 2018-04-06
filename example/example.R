@@ -15,7 +15,7 @@ lgb.trees <- lgb.model.dt.tree(lgb.model)
 head(lgb.trees)
 
 library(lightgbmExplainer)
-explainer = buildExplainer(colnames(lgb.model,lgb.train$data), type="binary", base_score = 0.5)
+explainer = buildExplainer(lgb.trees, colnames(lgb.train$data))
 pred.breakdown = explainPredictions(lgb.model, explainer, lgb.train$data)
 predict(lgb.model,data_with_na)[2]
 predict(lgb.model,data_with_na, rawscore = T)[2]
