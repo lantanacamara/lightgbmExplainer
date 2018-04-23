@@ -8,8 +8,9 @@ buildExplainerFromTree = function(lgb_tree_with_stat){
   ####outputs a data table, of the impact of each variable + intercept, for each leaf
   col_names <- purrr::discard(unique(lgb_tree_with_stat$split_feature), is.na)
 
-  lgb_tree_with_stat_breakdown <- vector("list", length(col_names)  + 3)
-  names(lgb_tree_with_stat_breakdown) = c(col_names,'intercept', 'leaf','tree')
+  lgb_tree_with_stat_breakdown <-
+    setNames(data.table(matrix(nrow = 0, ncol = length(col_names) + 3)),
+           c(col_names,'intercept', 'leaf','tree'))
 
   num_trees = length(unique(lgb_tree_with_stat$tree_index))
 
@@ -23,7 +24,8 @@ buildExplainerFromTree = function(lgb_tree_with_stat){
     lgb_tree_with_stat_breakdown = rbindlist(append(list(lgb_tree_with_stat_breakdown),list(tree_breakdown)))
     setTxtProgressBar(pb, (x+1) / num_trees)
   }
-
+  # replace NA with 0
+  lgb_tree_with_stat_breakdown[is.na(lgb_tree_with_stat_breakdown)] <- 0
   return (lgb_tree_with_stat_breakdown)
 
 }

@@ -23,6 +23,9 @@ predict(lgb.model,data_with_na, predleaf = T)[2,]
 showWaterfall(lgb.model, explainer, lgb.dtrain, data_with_na,  2, type = "binary")
 showWaterfall(lgb.model, explainer, lgb.dtrain, lgb.train$data,  8, type = "binary")
 
+# Profiling
+library(profvis)
+profvis(buildExplainer(lgb.trees))
 
 ##### Xgboost ######
 library(xgboost)
