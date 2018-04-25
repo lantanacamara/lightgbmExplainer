@@ -20,12 +20,25 @@ pred.breakdown = explainPredictions(lgb.model, explainer, lgb.train$data)
 predict(lgb.model,data_with_na)[2]
 predict(lgb.model,data_with_na, rawscore = T)[2]
 predict(lgb.model,data_with_na, predleaf = T)[2,]
+pred.breakdown[1:5]
+lgb.interprete(lgb.model,data_with_na,2)
+lgb.interprete(lgb.model,data_with_na,1:5)->temp
+lgb.plot.interpretation(temp[[1]])
 showWaterfall(lgb.model, explainer, lgb.dtrain, data_with_na,  2, type = "binary")
 showWaterfall(lgb.model, explainer, lgb.dtrain, lgb.train$data,  8, type = "binary")
 
 # Profiling
+library(readr)
+target_data <- read_rds("../../temp/lightgbmexplainer/2018-04-25/target_data.rds")
+lgb.model <- lgb.load("../../temp/lightgbmexplainer/2018-04-25/lightgbm_v2_4_2_2.txt")
 library(profvis)
-profvis(buildExplainer(lgb.trees))
+profvis(lgb.trees <- lgb.model.dt.tree(lgb.model)) # 8040ms/654.7MB
+profvis(explainer <- buildExplainer(lgb.trees)) # 23380ms/3136.3MB
+# (v0.1 benchmark - 142150ms/8134.5MB (lgb.model.dt.tree excluded))
+profvis(pred.breakdown <- explainPredictions(lgb.model, explainer, as.matrix(target_data$data))) # 14160ms / 388.0MB
+profvis(temp <- lgb.interprete(lgb.model,as.matrix(target_data$data),2)) # 16580ms/1048.0MB
+temp
+pred.breakdown[2]
 
 ##### Xgboost ######
 library(xgboost)
