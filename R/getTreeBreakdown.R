@@ -6,19 +6,22 @@ getTreeBreakdown = function(tree, col_names){
   ####accepts a tree (data table), and column names
   ####outputs a data table, of the impact of each variable + intercept, for each leaf
 
+  tree_breakdown <-
+    setNames(data.table(matrix(nrow = 0, ncol = length(col_names) + 2)),
+             c(col_names,'intercept', 'leaf'))
 
+  temp <- copy(tree)
+  temp[,path:=purrr::map(index, findPath, index, parent)]
+  temp <- merge(tidyr::unnest(temp[index <0, .(leaf = -index-1, path)]),
+        temp[, .(path = index, previous_feature,uplift_weight)],
+        all.x = T, sort = F)
+  temp <- temp[!is.na(previous_feature),
+       .(uplift_weight = sum(uplift_weight)),
+       by =.(leaf, previous_feature)]
+  temp <- dcast(temp, formula = leaf ~ previous_feature,
+        value.var = "uplift_weight", fill = 0)
 
-  tree_breakdown <- vector("list", length(col_names)  + 2)
-  names(tree_breakdown) = c(col_names,'intercept','leaf')
-
-  leaves = tree[index<0, index]
-
-  for (leaf in sort(leaves, decreasing = T)){
-
-    leaf_breakdown = getLeafBreakdown(tree,leaf,col_names)
-    leaf_breakdown$leaf = -leaf-1 # from native represnetation back to lgb.dt.tree
-    tree_breakdown = rbindlist(append(list(tree_breakdown),list(leaf_breakdown)))
-  }
+  tree_breakdown = rbindlist(list(tree_breakdown, temp), use.names = T, fill = TRUE)
 
   return (tree_breakdown)
 }
