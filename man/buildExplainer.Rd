@@ -4,16 +4,10 @@
 \alias{buildExplainer}
 \title{Step 1: Build an lightgbmExplainer}
 \usage{
-buildExplainer(lgb.model, trainingData, type = "binary", base_score = 0.5)
+buildExplainer(lgb_tree)
 }
 \arguments{
-\item{lgb.model}{A trained lightgbm model}
-
-\item{trainingData}{A lgb.Dataset of data used to train the model}
-
-\item{type}{The objective function of the model - either "binary" (for binary:logistic) or "regression" (for reg:linear)}
-
-\item{base_score}{Default 0.5. The base_score variable of the lightgbm model.}
+\item{lgb_tree}{A lightgbm.dt.tree}
 }
 \value{
 The lightgbm Explainer for the model. This is a data table where each row is a leaf of a tree in the lightgbm model
@@ -29,19 +23,20 @@ The lightgbm Explainer for the model. This is a data table where each row is a l
 This function outputs an lightgbmExplainer (a data table that stores the feature impact breakdown for each leaf of each tree in an lightgbm model). It is required as input into the explainPredictions and showWaterfall functions.
 }
 \examples{
-library(lightgbm)
+library(lightgbm) # v2.1.0 or above
 library(lightgbmExplainer)
 
-lgb.train <- agaricus.train
-lgb.dtrain <- lgb.Dataset(lgb.train$data, label = lgb.train$label)
-lgb.params = list(objective = "binary")
-lgb.model <- lgb.train(lgb.params, lgb.dtrain, 3)
-lgb.trees <- lgb.model.dt.tree(lgb.model)
-lgb.trees
-library(lightgbmExplainer)
-explainer = buildExplainer(xgb.model,xgb.train.data, type="binary", base_score = 0.5)
-pred.breakdown = explainPredictions(xgb.model, explainer, xgb.test.data)
-
-showWaterfall(xgb.model, explainer, xgb.test.data, test.data,  2, type = "binary")
-showWaterfall(xgb.model, explainer, xgb.test.data, test.data,  8, type = "binary")
+# Load Data
+data(agaricus.train, package = "lightgbm")
+# Train a model
+lgb.dtrain <- lgb.Dataset(agaricus.train$data, label = agaricus.train$label)
+lgb.params <- list(objective = "binary")
+lgb.model <- lgb.train(lgb.params, lgb.dtrain, 5)
+# Build Explainer
+lgb.trees <- lgb.model.dt.tree(lgb.model) # First get a lgb tree
+explainer <- buildExplainer(lgb.trees)
+# compute contribution for each data point
+pred.breakdown <- explainPredictions(lgb.model, explainer, agaricus.train$data)
+# Show waterfall for the 8th observation
+showWaterfall(lgb.model, explainer, lgb.dtrain, agaricus.train$data,  8, type = "binary")
 }

@@ -15,21 +15,22 @@
 #' @import data.table
 #' @import lightgbm
 #' @examples
-#' library(lightgbm)
+#' library(lightgbm) # v2.1.0 or above
 #' library(lightgbmExplainer)
 #'
-#' lgb.train <- agaricus.train
-#' lgb.dtrain <- lgb.Dataset(lgb.train$data, label = lgb.train$label)
-#' lgb.params = list(objective = "binary")
-#' lgb.model <- lgb.train(lgb.params, lgb.dtrain, 3)
-#' lgb.trees <- lgb.model.dt.tree(lgb.model)
-#' lgb.trees
-#' library(lightgbmExplainer)
-#' explainer = buildExplainer(lgb.trees, colnames(lgb.train.data$data))
-#' pred.breakdown = explainPredictions(lgb.model, explainer, lgb.test.data)
-#'
-#' showWaterfall(lgb.model, explainer, lgb.test.data, test.data,  2, type = "binary")
-#' showWaterfall(lgb.model, explainer, lgb.test.data, test.data,  8, type = "binary")
+#' # Load Data
+#' data(agaricus.train, package = "lightgbm")
+#' # Train a model
+#' lgb.dtrain <- lgb.Dataset(agaricus.train$data, label = agaricus.train$label)
+#' lgb.params <- list(objective = "binary")
+#' lgb.model <- lgb.train(lgb.params, lgb.dtrain, 5)
+#' # Build Explainer
+#' lgb.trees <- lgb.model.dt.tree(lgb.model) # First get a lgb tree
+#' explainer <- buildExplainer(lgb.trees)
+#' # compute contribution for each data point
+#' pred.breakdown <- explainPredictions(lgb.model, explainer, agaricus.train$data)
+#' # Show waterfall for the 8th observation
+#' showWaterfall(lgb.model, explainer, lgb.dtrain, agaricus.train$data,  8, type = "binary")
 
 
 buildExplainer = function(lgb_tree){
