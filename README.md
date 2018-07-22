@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/lantanacamara/lightgbmExplainer.svg?branch=master)](https://travis-ci.org/lantanacamara/lightgbmExplainer)
+
 ## lightgbmExplainer
 An R package that makes LightGBM models fully interpretable
 
