@@ -12,9 +12,9 @@ getTreeBreakdown = function(tree, col_names){
 
   temp <- copy(tree)
   temp[,path:=purrr::map(index, findPath, index, parent)]
-  temp <- merge(tidyr::unnest(temp[index <0, .(leaf = -index-1, path)]),
+  temp <- data.table(merge(tidyr::unnest(temp[index <0, .(leaf = -index-1, path)]),
         temp[, .(path = index, previous_feature,uplift_weight)],
-        all.x = T, sort = F)
+        all.x = T, sort = F))
   temp <- temp[!is.na(previous_feature),
        .(uplift_weight = sum(uplift_weight)),
        by =.(leaf, previous_feature)]
